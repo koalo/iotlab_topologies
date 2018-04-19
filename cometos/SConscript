@@ -1,0 +1,9 @@
+Import('env')
+import os
+
+SConscript(os.environ['COMETOS_PATH']+'/examples/common/SConscript')
+
+env.add_sources(['main.cc'])
+
+env.conf_to_str_define(['send_interval'])
+
