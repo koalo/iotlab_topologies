@@ -33,15 +33,6 @@ def kappa_fun(kind,depth):
     else:
         assert False
 
-def load_graph(site,name,reload):
-    fname = os.path.join(CACHE_FOLDER,site+'-'+name+'.pick')
-    if not os.path.isfile(fname) or reload:
-        print("Building graph cache")
-        load.load_graph(site,name,fname)
-    G = nx.read_gpickle(fname)
-    print("Graph loaded")
-    return G
-
 def process(G,bound,root,kappa='tree',c=None,reduction=False,margin=8):
     depths = {x: float('inf') for x in G.nodes()}
     current_level = deque([root])
@@ -193,7 +184,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('site')
     parser.add_argument('name')
-    parser.add_argument('--margin','-m',default=8,type=int)
+    parser.add_argument('--margin','-m',default=8,type=int,help='Margin (default 8)')
     parser.add_argument('--kappa','-k',default='tree',nargs='?',const='tree',choices=['line','tree'],help='choose between tree (kappa(delta) = delta+1) and line (kappa(delta) = 1). Other functions should be added in the code.')
     parser.add_argument('--no-reduction','-n',action='store_true', help='do not perform the node reduction part of the algorithm.')
     parser.add_argument('--reload','-r',action='store_true', help='reload cached graph (after new channel measurement).')
@@ -205,7 +196,8 @@ if __name__ == "__main__":
     mkdirp(RESULT_FOLDER)
     mkdirp(CACHE_FOLDER)
 
-    G = load_graph(args.site,args.name,args.reload)
+    fname = os.path.join(CACHE_FOLDER,args.site+'-'+args.name+'.pick')
+    G = load.load_graph(args.site,args.name,fname,args.reload)
 
     csvname = os.path.join(RESULT_FOLDER,args.site+"-"+args.name+'.csv')
     if not args.print_only:

@@ -58,9 +58,14 @@ Toolset for Generating Multi-hop Topologies for the FIT IoT-LAB
     ./nodedeg.py paths-data-lyon-m3-all.json
     ```
 
-9. Run the selection algorithm
+9. Run the tree selection algorithm
     ```
     cd ~/topologies/iotlab_topologies/selection/
-    ./selection.py lyon all
+    ./tree_selection.py lyon all
     ```
 
+10. Run the fixed density algorithm 
+    ```
+    cd ~/topologies/iotlab_topologies/selection/
+    ./density.py lyon all 60
+    ```
