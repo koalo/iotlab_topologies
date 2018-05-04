@@ -1,35 +1,20 @@
 #!/usr/bin/env python3
-import json
-import numpy as np
-import math
 import networkx as nx
-from collections import deque
 import sys
 import os
 sys.path.insert(0,os.path.join(os.path.dirname(os.path.abspath(os.path.dirname(__file__))),'topology'))
 sys.path.insert(0,os.path.join(os.path.dirname(os.path.abspath(os.path.dirname(__file__))),'helper'))
-from address_finder import *
-import helpers
 import pygraphviz as pgv
-import matplotlib.pyplot as plt
-import pandas as pd
 import load
 import argparse
-from pulp import *
-import time
+import pulp
 import errno
-from multiprocessing import Pool
-import multiprocessing
-import copy
 
 NODE_TYPE = 'm3'
 CACHE_FOLDER = os.path.join(os.path.dirname(__file__),'cache')
 RESULT_FOLDER = os.path.join(os.path.dirname(__file__),'results')
 
 def process(site,name,G,bound,degree):
-    parent = {}
-    depth = 0
-
     res = nx.Graph(undirected=True)
 
     for (u,v,d) in G.edges(data=True):
@@ -38,10 +23,9 @@ def process(site,name,G,bound,degree):
 
     count = 0
 
-    before = len(res.nodes())
     K = res.to_undirected()
-    prob = LpProblem("NodeReduction",LpMaximize)
-    x = {n: LpVariable("Node_"+str(n),0,1,LpInteger) for n in K.nodes()}
+    prob = pulp.LpProblem("NodeReduction",pulp.LpMaximize)
+    x = {n: pulp.LpVariable("Node_"+str(n),0,1,pulp.LpInteger) for n in K.nodes()}
 
     prob += sum(x.values()) # maximize objective function
 
@@ -50,13 +34,7 @@ def process(site,name,G,bound,degree):
         prob += sum(neighbours) <= degree+len(G.nodes())*(1-x[n])
         prob += sum(neighbours) >= degree*x[n]
 
-    #print(prob)
-    
-    start = time.time()
     prob.solve()
-    end = time.time()
-
-    #print(end-start)
 
     for n in K.nodes():
         if not x[n].varValue == 1:

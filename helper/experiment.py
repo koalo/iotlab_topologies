@@ -1,5 +1,4 @@
 from multiprocessing import Process, Value
-import time
 import os
 import iotlabcli.parser.node
 import argparse

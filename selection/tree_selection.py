@@ -1,22 +1,16 @@
 #!/usr/bin/env python3
-import json
-import numpy as np
-import math
 import networkx as nx
 from collections import deque
 import sys
 import os
 sys.path.insert(0,os.path.join(os.path.dirname(os.path.abspath(os.path.dirname(__file__))),'topology'))
 sys.path.insert(0,os.path.join(os.path.dirname(os.path.abspath(os.path.dirname(__file__))),'helper'))
-from address_finder import *
-import helpers
+from address_finder import address_for_node
 import pygraphviz as pgv
-import matplotlib.pyplot as plt
 import pandas as pd
 import load
 import argparse
-from pulp import *
-import time
+import pulp
 import errno
 from multiprocessing import Pool
 import multiprocessing
@@ -87,10 +81,9 @@ def process(G,bound,root,kappa='tree',c=None,reduction=False,margin=8):
             break
 
     if reduction:
-        before = len(res.nodes())
         K = res.to_undirected()
-        prob = LpProblem("NodeReduction",LpMinimize)
-        x = {n: LpVariable("Node_"+str(n),0,1,LpInteger) for n in K.nodes()}
+        prob = pulp.LpProblem("NodeReduction",pulp.LpMinimize)
+        x = {n: pulp.LpVariable("Node_"+str(n),0,1,pulp.LpInteger) for n in K.nodes()}
 
         prob += sum(x.values()) # minimize objective function
 
@@ -103,9 +96,7 @@ def process(G,bound,root,kappa='tree',c=None,reduction=False,margin=8):
             potential_parents = [x[v] for (u,v) in K.edges([n]) if depths[u] > depths[v]]
             prob += x[n] <= sum(potential_parents)
         
-        start = time.time()
         prob.solve()
-        end = time.time()
 
         for n in K.nodes():
             if not x[n].varValue == 1:

@@ -6,14 +6,12 @@ import os
 sys.path.insert(0, os.path.dirname(__file__)+'/../helper')
 from address_finder import *
 from positions import *
-from math import *
 from Graph import *
 from plot_topo import *
 import argparse
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 import matplotlib.cm as cmx
-import copy
 import pandas as pd
 import stats
 

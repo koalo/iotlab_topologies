@@ -4,14 +4,11 @@ import numpy as np
 import sys
 import os
 sys.path.insert(0, os.path.dirname(__file__)+'/../helper')
-from math import *
 import argparse
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 import matplotlib.cm as cmx
-import copy
 import pandas as pd
-import json
 import stats
 
 def nodedeg(f,degsteps=None):

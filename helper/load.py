@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 import json
 import numpy as np
-import math
 import networkx as nx
-from collections import deque
 import sys
 import os
 sys.path.insert(0,os.path.dirname(__file__)+'/../topology')
