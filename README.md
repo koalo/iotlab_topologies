@@ -1,6 +1,14 @@
 Toolset for Generating Multi-hop Topologies for the FIT IoT-LAB
 ===============================================================
 
+Implementation of the algorithms presented in
+
+F. Kauer and V. Turau, Constructing Customized Multi-hop Topologies in Dense Wireless Network Testbeds in Ad-hoc, Mobile, and Wireless Networks, Lecture Notes in Computer Science 11104, presented at the 17th International Conference on Ad Hoc Networks and Wireless (AdHoc-Now), St Malo, France, September 2018. https://doi.org/10.1007/978-3-030-00247-3_28
+
+Preprint available at https://arxiv.org/abs/1805.06661
+
+Usage
+-----
 
 1. Setup a working directory
 
@@ -53,11 +61,27 @@ Toolset for Generating Multi-hop Topologies for the FIT IoT-LAB
     ./tree_selection.py lyon all
     ```
 
+    For further options, run `./tree_selection.py --help`.
+
+    It outputs multiple results like this
+    ```
+    Topology with 6 nodes, depth 2 and root 6 (0xc279) for bound 56:
+    [6, 10, 3, 7, 18, 2]
+    Graph plot in ./results/lyon-all-01.png
+    ```
+
+    That means, a tree topology was found that is also illustrated in the given png file. In this case, it consists of 6 nodes, has a depth of 2 and the node with ID 6 as root. The other nodes are 10, 3, 7, 18, 2. When using these 6 nodes in an IoT-LAB experiment and setting the transmission power and sensitivity according to the bound 56 (see the paper above for details), one can expect the given tree topology.
+
+
 8. Run the fixed density algorithm 
     ```
     cd ~/topologies/iotlab_topologies/selection/
     ./density.py lyon all 60
     ```
+
+    For further options, run `./density.py --help`.
+
+    The result is similar to the one of the tree selection. However, you have to manually specify the bound (60 in this example).
 
 Generate the Measurement Firmware
 ---------------------------------
