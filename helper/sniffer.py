@@ -2,17 +2,19 @@ import os
 from helpers import *
 import subprocess
 
-#SNIFFER_PATH = os.path.join(os.environ['COMETOS_PATH'], 'examples/hardware/sniffer/M3RssiSniffer')
-#SNIFFER_CMD = "cob channel_test=True sniff_channel=0 own_pan_id=121"
-
-SNIFFER_PATH = os.path.join(os.environ['COMETOS_PATH'], 'examples/hardware/sniffer/PureSniffer')
-SNIFFER_CMD = "cob platform=M3OpenNode mac_default_channel=13"
-
-SNIFFER_IMAGE = os.path.join(SNIFFER_PATH,"bin/M3OpenNode/Device.elf")
 
 def init_sniffer(run,site,node_type,sniffer_nodes,exp_id):
     if len(sniffer_nodes) == 0:
         return
+
+    try:
+        SNIFFER_PATH = os.path.join(os.environ['COMETOS_PATH'], 'examples/hardware/sniffer/PureSniffer')
+        SNIFFER_CMD = "cob platform=M3OpenNode mac_default_channel=13"
+
+        SNIFFER_IMAGE = os.path.join(SNIFFER_PATH,"bin/M3OpenNode/Device.elf")
+    except:
+        print("Sniffer is only available when using self-compiled binaries. Please set sniffer_nodes = []")
+        exit(1)
 
     # Remove image first to verify later it is this file that is built
     try:
