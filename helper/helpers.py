@@ -32,8 +32,6 @@ def states(site,node_type,nodes):
     api = rest.Api(user, passwd)
 
     resources = api.get_nodes(True,site)
-    #resources = resources['items'][0][site][node_type]    Not working anymore -> REST API update 
-    
     node_strings = {} 
     for node_types in resources['items'][0]['archis']:
         if node_type in node_types['archi']:
