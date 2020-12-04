@@ -31,8 +31,15 @@ def states(site,node_type,nodes):
     user, passwd = auth.get_user_credentials()
     api = rest.Api(user, passwd)
 
-    resources = api.get_resources(True,site)
-    resources = resources['items'][0][site][node_type]
+    resources = api.get_nodes(True,site)
+    #resources = resources['items'][0][site][node_type]    Not working anymore -> REST API update 
+    
+    node_strings = {} 
+    for node_types in resources['items'][0]['archis']:
+        if node_type in node_types['archi']:
+            for states in node_types['states']:
+                node_strings[states['state']] = states['ids']                    
+    resources = node_strings
 
     print(resources)
 
